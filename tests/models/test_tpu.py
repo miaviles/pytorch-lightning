@@ -19,13 +19,14 @@ import pytest
 from torch.utils.data import DataLoader
 
 import tests.base.develop_pipelines as tpipes
+import tests.base.develop_utils as tutils
 from pytorch_lightning import Trainer
 from pytorch_lightning.accelerators import TPUAccelerator
 from pytorch_lightning.callbacks import EarlyStopping
 from pytorch_lightning.trainer.states import TrainerState
 from pytorch_lightning.utilities import _TPU_AVAILABLE
 from pytorch_lightning.utilities.exceptions import MisconfigurationException
-from tests.base import EvalModelTemplate
+from tests.base import BoringModel, EvalModelTemplate
 from tests.base.datasets import TrialMNIST
 from tests.base.develop_utils import pl_multi_process_test
 
@@ -46,6 +47,7 @@ def _serial_train_loader():
 @pl_multi_process_test
 def test_model_tpu_cores_1(tmpdir):
     """Make sure model trains on TPU."""
+    tutils.reset_seed()
     trainer_options = dict(
         default_root_dir=tmpdir,
         progress_bar_refresh_rate=0,
@@ -55,7 +57,7 @@ def test_model_tpu_cores_1(tmpdir):
         limit_val_batches=0.4,
     )
 
-    model = EvalModelTemplate()
+    model = BoringModel()
     tpipes.run_model_test(trainer_options, model, on_gpu=False, with_hpc=False)
 
 
