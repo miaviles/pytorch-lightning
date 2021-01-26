@@ -23,7 +23,7 @@ import tests.base.develop_utils as tutils
 from pytorch_lightning import Trainer
 from pytorch_lightning.callbacks import Callback, EarlyStopping, ModelCheckpoint
 from pytorch_lightning.trainer.states import TrainerState
-from tests.base import BoringModel, EvalModelTemplate
+from tests.base import BoringModel
 
 
 def test_cpu_slurm_save_load(tmpdir):
@@ -300,12 +300,11 @@ def test_cpu_model(tmpdir):
         default_root_dir=tmpdir,
         progress_bar_refresh_rate=0,
         max_epochs=1,
-        limit_train_batches=0.4,
-        limit_val_batches=0.4
+        limit_train_batches=4,
+        limit_val_batches=4
     )
 
-    model = EvalModelTemplate()
-
+    model = BoringModel()
     tpipes.run_model_test(trainer_options, model, on_gpu=False)
 
 
