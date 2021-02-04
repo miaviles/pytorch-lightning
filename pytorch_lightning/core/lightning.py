@@ -20,6 +20,7 @@ import inspect
 import os
 import re
 import tempfile
+import uuid
 from abc import ABC
 from argparse import Namespace
 from functools import partial
@@ -1780,3 +1781,10 @@ class LightningModule(
             return "hparams"
 
         return None
+
+    def model_size(self) -> float:
+        tmp_name = f"{uuid.uuid4().hex}.pt"
+        torch.save(self.state_dict(), tmp_name)
+        size_mb = os.path.getsize(tmp_name) / 1e6
+        os.remove(tmp_name)
+        return size_mb
