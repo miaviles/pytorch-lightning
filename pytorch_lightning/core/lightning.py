@@ -71,6 +71,7 @@ class LightningModule(
         "global_rank",
         "local_rank",
         "logger",
+        "model_size",
     ] + DeviceDtypeModuleMixin.__jit_unused_properties__
 
     def __init__(self, *args, **kwargs):
