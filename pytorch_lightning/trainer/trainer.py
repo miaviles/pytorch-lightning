@@ -459,6 +459,7 @@ class Trainer(
         # SET UP TRAINING
         # ----------------------------
         self.call_setup_hook(model)
+        self.call_hook("on_before_accelerator_backend_setup", model)
         self.accelerator_backend.setup(self, model)
         self.setup_trainer(model)
 
@@ -470,7 +471,6 @@ class Trainer(
 
         # plugin will setup training (e.g. ddp will launch child processes)
         # TODO: the old setup is now called "pre_training", where should this hook be called now?
-        self.call_hook("on_before_accelerator_backend_setup", model)
         self.training_type_plugin.pre_training()
         self.precision_plugin.pre_training()
 
