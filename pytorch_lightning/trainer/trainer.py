@@ -458,6 +458,7 @@ class Trainer(
         # ----------------------------
         # SET UP TRAINING
         # ----------------------------
+        self.call_setup_hook(model)
         self.accelerator_backend.setup(self, model)
         self.setup_trainer(model)
 
@@ -472,8 +473,6 @@ class Trainer(
         self.call_hook("on_before_accelerator_backend_setup", model)
         self.training_type_plugin.pre_training()
         self.precision_plugin.pre_training()
-
-        self.call_setup_hook(self.lightning_module)
 
         # double dispatch: let the plugin initiate the training/test loop.
         if self.testing:
